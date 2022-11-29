@@ -1,0 +1,15 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=M+PLUS+1p:wght@300&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply text-[#444466];
+  }
+  h1 {
+    @apply font-montserrat text-3xl font-bold;
+  }
+}
