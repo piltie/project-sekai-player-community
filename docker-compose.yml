@@ -1,0 +1,39 @@
+version: "3"
+services:
+  database:
+    image: postgres:12.1
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-1234}
+      POSTGRES_DB: pscommunity
+    volumes:
+      - ./postgresql/data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+  service:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    volumes:
+      - /app/node_modules
+      - ./server/config:/app/config
+      - ./server/src:/app/src
+    depends_on:
+      database:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    volumes:
+      - /app/node_modules
+      - ./client:/app
+    ports:
+      - "8080:8080"
